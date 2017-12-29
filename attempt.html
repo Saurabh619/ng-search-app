@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="description" content="Search implementation">
+  <meta name="author" content="Saurabh619">
+  <title>Find Banks Branches | Fyle</title>
+  <style media="screen">
+    body {
+      color: #9678ae;
+      background-color: #240B34;
+      overflow-x: hidden;
+    }
+
+    .container {
+      padding: 40px 40px 0px 160px;
+      width: -webkit-fill-available;
+    }
+
+    #navbar {
+      overflow: hidden;
+      background-color: #240B34;
+      margin: auto;
+    }
+
+    .content {
+      padding: 10px 160px;
+    }
+
+    .sticky {
+      position: fixed;
+      top: 0;
+    }
+
+    .content {
+      padding-top: 60px;
+    }
+
+    .row {
+      padding: 30px 0px;
+      width: 100%;
+    }
+
+    .fyletext {
+      display: inline;
+      text-transform: full-width;
+      font-weight: 800;
+      font-family: 'Open Sans', sans-serif;
+      color: rgb(235, 60, 100);
+    }
+
+    .sticky-header {
+      position: fixed;
+      top: 189px;
+      width: 100%
+    }
+
+    #header {
+      overflow: hidden;
+      background-color: #240B34;
+      margin: auto;
+    }
+
+    .head {
+      background-color: #240B34;
+    }
+
+    .tableheader {
+      min-width: 122px;
+      text-align: left;
+      font-size: 0.8em;
+      font-weight: 600;
+      font-family: 'Open Sans', sans-serif;
+      color: rgb(255, 255, 255);
+    }
+
+    .tablerows {
+      min-width: 122px;
+      text-align: left;
+      font-size: 0.8em;
+      font-weight: 600;
+      font-family: 'Open Sans', sans-serif;
+    }
+
+    .logo {
+      width: 100%;
+      display: inline;
+    }
+
+    .logostyle {
+      width: 3%;
+    }
+
+    .padd {
+      padding: 10px;
+      vertical-align: super;
+    }
+
+    .dropdown {
+      color: #240B34;
+      width: 15%;
+      padding: 10px;
+      border-color: rgb(235, 60, 100);
+    }
+
+    .searchbar {
+      width: 20%;
+      margin-left: 30px;
+      padding: 10px;
+      border-color: rgb(235, 60, 100);
+    }
+
+    .inline {
+      display: inline;
+    }
+
+    table {
+      overflow-y: scroll;
+      margin-top: 12px;
+      font-family: arial, sans-serif;
+      border-collapse: collapse;
+      width: 100%;
+    }
+
+    td,
+    th {
+      border: 1px solid rgb(235, 60, 100);
+      text-align: left;
+      padding: 8px;
+    }
+
+    tr:nth-child(even) {
+      background-color: #dddddd;
+    }
+
+    .nanobar .bar {
+      background: rgb(235, 60, 100);
+      height: 2px;
+    }
+
+    .disabled {
+      background-color: gray !important;
+    }
+
+    .fylebutton {
+      text-decoration: none;
+      text-transform: uppercase;
+      background-color: rgb(235, 60, 100);
+      color: #fff;
+      margin-left: 2%;
+      padding: 10px 20px;
+      font-size: 14px;
+      border-radius: 4px;
+      display: inline-block;
+    }
+
+    .fyletext {
+      color: rgb(235, 60, 100);
+    }
+
+    .filter {
+      float: right;
+      width: 20px;
+    }
+
+    .padlr {
+      padding: 0px 5px;
+    }
+
+    .paddtb {
+      padding: 20px;
+      text-align: center;
+    }
+
+    select#soflow {
+      -webkit-appearance: button;
+      -webkit-border-radius: 2px;
+      -webkit-box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
+      -webkit-padding-end: 20px;
+      -webkit-padding-start: 2px;
+      -webkit-user-select: none;
+      background-image: url(http://i62.tinypic.com/15xvbd5.png), -webkit-linear-gradient(#FAFAFA, #F4F4F4 40%, #E5E5E5);
+      background-position: 97% center;
+      background-repeat: no-repeat;
+      border: 1px solid #AAA;
+      color: #240B34;
+      font-size: inherit;
+      margin: 20px;
+      overflow: hidden;
+      padding: 5px 10px;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      width: 300px;
+    }
+
+    .sp {
+      width: 32px;
+      height: 32px;
+      clear: both;
+      margin: 10px auto;
+    }
+
+    /* Spinner Wave */
+
+    .sp-wave {
+      border-radius: 50%;
+      position: relative;
+      opacity: 1;
+    }
+
+    .sp-wave:before,
+    .sp-wave:after {
+      content: '';
+      border: 1px #fafafa solid;
+      border-radius: 50%;
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      left: 0px;
+    }
+
+    .sp-wave:before {
+      transform: scale(1, 1);
+      opacity: 1;
+      -webkit-animation: spWaveBe 0.6s infinite linear;
+      animation: spWaveBe 0.6s infinite linear;
+    }
+
+    .sp-wave:after {
+      transform: scale(0, 0);
+      opacity: 0;
+      -webkit-animation: spWaveAf 0.6s infinite linear;
+      animation: spWaveAf 0.6s infinite linear;
+    }
+
+    @-webkit-keyframes spWaveAf {
+      from {
+        -webkit-transform: scale(0.5, 0.5);
+        opacity: 0;
+      }
+      to {
+        -webkit-transform: scale(1, 1);
+        opacity: 1;
+      }
+    }
+
+    @keyframes spWaveAf {
+      from {
+        transform: scale(0.5, 0.5);
+        opacity: 0;
+      }
+      to {
+        transform: scale(1, 1);
+        opacity: 1;
+      }
+    }
+
+    @-webkit-keyframes spWaveBe {
+      from {
+        -webkit-transform: scale(1, 1);
+        opacity: 1;
+      }
+      to {
+        -webkit-transform: scale(1.5, 1.5);
+        opacity: 0;
+      }
+    }
+
+    @keyframes spWaveBe {
+      from {
+        -webkit-transform: scale(1, 1);
+        opacity: 1;
+      }
+      to {
+        -webkit-transform: scale(1.5, 1.5);
+        opacity: 0;
+      }
+    }
+  </style>
+</head>
+
+<body ng-app="bankerApp">
+  <div ng-controller="BodyController">
+
+    <div class="container" id="navbar">
+      <div class="logo">
+        <img class="logostyle" src="https://www.fylehq.com/hs-fs/hubfs/Home/Logo.png?t=1514441745881&width=38&name=Logo.png" alt="fyle">
+        <span class="padd">
+          <h3 class="fyletext">Find your</h3>
+          <h1 class="fyletext padlr">Bank</h1>
+          <h3 class="fyletext">here !</h3>
+        </span>
+      </div>
+
+      <div class="row">
+        <select class="dropdown" name="search" id="softflow" ng-model="searchable_city" ng-change="findBanksInTheCity(50,0)">
+          <option value="" selected>Select City</option>
+          <option ng-repeat="city in cities" ng-value="city" ng-bind="city | uppercase"></option>
+        </select>
+        <input class="searchbar fyletext" type="text" name="bar" ng-model="searchText" placeholder="🔎   Search by {{selectedFieldName | uppercase}}">
+        <button class="fylebutton" type="button" name="button" ng-click="findBanksInTheCity(50,-50)" ng-disabled="offset == 0" ng-class="{'disabled': offset == 0}">Previous</button>
+        <button class="fylebutton" type="button" name="button" ng-click="findBanksInTheCity(50,50)">Next</button>
+      </div>
+    </div>
+
+
+    <div class="table content">
+      <table ng-if="searchable_city && banks" when-scrolled="more()">
+        <tr class="head" id="header">
+          <th class="tableheader" ng-repeat="head in headers">
+            <span ng-bind="head | uppercase" ng-class="{'fyletext': selectedFieldName == head}"></span>
+            <span style="display:none;">
+              <input type="radio" name="thisradio" ng-model="selectedFieldName" value="yes">
+            </span>
+            <img id="radio1" src="src/assets/images/filter-outline.png" class="filter" ng-click="selectFieldName(head)" style="cursor:pointer;">
+          </th>
+        </tr>
+        <tbody>
+          <tr class="tablerows" ng-repeat="bank in banks | filter:SearchList">
+            <td ng-repeat="head in headers" ng-bind="bank[head] | uppercase"></td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="sp sp-wave" ng-if="searchable_city != '' && loading"></div>
+      <div class="paddtb" ng-if="searchable_city != '' && !loading && (banks | filter:SearchList).length == 0">Nothing here! Try searching with different combinations...</div>
+    </div>
+
+  </div>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.6/angular.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/nanobar/0.4.2/nanobar.min.js"></script>
+  <script type="text/javascript">
+    var bankerApp = angular.module('bankerApp', []);
+    bankerApp.controller('BodyController', function($scope, GatewayService, $window, $document, $timeout) {
+      $scope.cities = ["bangalore", "delhi", "mumbai", "jaipur", "udaipur", "bhopal", "hyderbad", "chennai", "pune"];
+      $scope.headers = ["ifsc", "bank_id", "bank_name", "branch", "address", "city", "district", "state"];
+      $scope.banks = [];
+      $scope.searchable_city = '';
+      $scope.limit = 50;
+      $scope.offset = 0;
+      $scope.loading = false;
+
+      $scope.nanobarOptions = {
+        classname: 'nanobar',
+      };
+
+      var nanobar = new Nanobar($scope.nanobarOptions);
+
+      $scope.checkIfEmpty = function(temp) {
+        return angular.isDefined(temp);
+      }
+
+      $scope.findBanksInTheCity = function(limit, offset) {
+        if (!$scope.loading) {
+          nanobar.go(60);
+          $scope.limit = limit;
+          $scope.offset += offset;
+          $scope.loading = true;
+          GatewayService.execute($scope.searchable_city, $scope.limit, $scope.offset)
+          .then(function(response) {
+            if (response.data) {
+              response.data.forEach(function(e) {
+                $scope.banks.push(e);
+              });
+              nanobar.go(100);
+              $scope.loading = false;
+            } else {
+              $scope.loading = false;
+              console.error("Failed to search object");
+            }
+          }).then(function(error) {
+            nanobar.go(100);
+            $scope.loading = false;
+            console.error("Failed to search object", error);
+          })
+        }
+      };
+
+      $scope.selectedFieldName = 'bank_name';
+      $scope.searchText = '';
+      $scope.selectFieldName = function(head) {
+        $scope.selectedFieldName = head;
+      }
+
+      $scope.SearchList = function(row) {
+        if ($scope.selectedFieldName && $scope.searchText) {
+          $scope.loading = true;
+          var propVal = row[$scope.selectedFieldName.toLowerCase()] + '';
+          if (propVal) {
+            $scope.loading = false;
+            return propVal.toUpperCase().indexOf($scope.searchText.toUpperCase()) > -1;
+          } else {
+            $scope.loading = false;
+            return false;
+          }
+        }
+        return true;
+      };
+
+      $scope.more = function() {
+        $scope.findBanksInTheCity(50, 50);
+      }
+
+      $window.onscroll = function() {
+        navFunction();
+      };
+
+      var navbar = document.getElementById("navbar");
+      var sticky = navbar.offsetTop;
+
+      function navFunction() {
+        if ($window.pageYOffset >= sticky) {
+          navbar.classList.add("sticky");
+        } else {
+          navbar.classList.remove("sticky");
+        }
+      }
+
+      function lazyload() {
+          if(window.scrollTo(0,0) == $document.height() - window.height()) {
+                 // ajax call get data from server and append to the div
+                 $scope.more();
+          }
+      };
+
+    });
+    bankerApp.factory('GatewayService', GatewayService);
+
+    /** @ngInject */
+    function GatewayService($log, $q, $http) {
+      var apiHost = 'https://app.fyle.in/api/';
+
+      var service = {
+        apiHost: apiHost,
+        execute: execute
+      };
+
+      return service;
+
+      function execute(city, limit, offset) {
+        if (!limit) {
+          limit = 50;
+        }
+
+        if (!offset) {
+          offset = 0;
+        }
+
+        var promise = $q.defer();
+        var baseURL = apiHost + 'bank_branches?city=' + city.toUpperCase() + '&offset=' + offset + '&limit=' + limit;
+        var headers = {
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        }
+        $http.get(baseURL, headers).then(function(result) {
+          $log.debug('Created object, ', result);
+          promise.resolve(result);
+        }, function(result) {
+          $log.debug("Failed to create object:", result);
+          promise.reject(result);
+        });
+        return promise.promise;
+      }
+    }
+
+    // we create a simple directive to modify behavior of <ul>
+    bankerApp.directive("whenScrolled", whenScrolled);
+
+    function whenScrolled() {
+      return {
+
+        restrict: 'A',
+        link: function(scope, elem, attrs) {
+
+          // we get a list of elements of size 1 and need the first element
+          raw = elem[0];
+          console.log(raw);
+          console.log(scope, elem, attrs);
+          // we load more elements when scrolled past a limit
+          elem.bind("scroll", function() {
+            if (raw.scrollTop + raw.offsetHeight + 5 >= raw.scrollHeight) {
+              scope.loading = true;
+
+              // we can give any function which loads more elements into the list
+              scope.$apply(attrs.whenScrolled);
+            }
+          });
+        }
+      }
+    };
+  </script>
+</body>
+
+</html>

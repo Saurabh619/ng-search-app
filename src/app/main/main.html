@@ -1,0 +1,42 @@
+<div class="container" id="navbar">
+  <div class="logo">
+    <img class="logostyle" src="https://www.fylehq.com/hs-fs/hubfs/Home/Logo.png?t=1514441745881&width=38&name=Logo.png" alt="fyle">
+    <span class="padd">
+      <h3 class="fyletext">Find your</h3>
+      <h1 class="fyletext padlr">Bank</h1>
+      <h3 class="fyletext">here !</h3>
+    </span>
+  </div>
+
+  <div class="row">
+    <select class="dropdown" name="search" id="softflow" ng-model="searchable_city" ng-change="findBanksInTheCity(50,0)">
+      <option value="" selected>Select City</option>
+      <option ng-repeat="city in cities" ng-value="city" ng-bind="city | uppercase"></option>
+    </select>
+    <input class="searchbar fyletext" type="text" name="bar" ng-model="searchText" placeholder="🔎   Search by {{selectedFieldName | uppercase}}">
+    <button class="fylebutton" type="button" name="button" ng-click="findBanksInTheCity(50,-50)" ng-disabled="offset == 0" ng-class="{'disabled': offset == 0}">Previous</button>
+    <button class="fylebutton" type="button" name="button" ng-click="findBanksInTheCity(50,50)">Next</button>
+  </div>
+</div>
+
+
+<div class="table content">
+  <table ng-if="searchable_city && banks" when-scrolled="more()">
+    <tr class="head" id="header">
+      <th class="tableheader" ng-repeat="head in headers">
+        <span ng-bind="head | uppercase" ng-class="{'fyletext': selectedFieldName == head}"></span>
+        <span style="display:none;">
+          <input type="radio" name="thisradio" ng-model="selectedFieldName" value="yes">
+        </span>
+        <img id="radio1" src="assets/images/filter-outline.png" class="filter" ng-click="selectFieldName(head)" style="cursor:pointer;">
+      </th>
+    </tr>
+    <tbody>
+      <tr class="tablerows" ng-repeat="bank in banks | filter:SearchList">
+        <td ng-repeat="head in headers" ng-bind="bank[head] | uppercase"></td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="sp sp-wave" ng-if="searchable_city != '' && loading"></div>
+  <div class="paddtb" ng-if="searchable_city != '' && !loading && (banks | filter:SearchList).length == 0">Nothing here! Try searching with different combinations...</div>
+</div>
